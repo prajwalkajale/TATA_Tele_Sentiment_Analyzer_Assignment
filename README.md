@@ -2,6 +2,9 @@
 
 Full-stack AI sentiment analysis application for the Tata Tele Business Services coding assignment. The app lets a user log in, upload or paste a telecom support conversation, analyze the conversation with an LLM-backed orchestration layer, and review sentiment, business KPIs, emotion detection, and line-level reasoning in a professional dashboard.
 
+##Vercel link
+https://telecom-sentiment-analyzer.vercel.app
+
 ## Architecture
 
 ```text
