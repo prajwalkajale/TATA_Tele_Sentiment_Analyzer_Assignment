@@ -1,0 +1,112 @@
+{
+  "name": "Telecom Sentiment Analyzer - n8n Orchestration",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "analyze-sentiment",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "0d2f1c2f-85f4-4f5d-9cf0-8d5e4af08401",
+      "name": "Webhook - Analyze Sentiment",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        280
+      ],
+      "webhookId": "telecom-sentiment-analyzer"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "none",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.OPENAI_API_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"{{$env.OPENAI_MODEL || 'gpt-4o-mini'}}\",\n  \"temperature\": 0.2,\n  \"response_format\": {\n    \"type\": \"json_object\"\n  },\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are an expert telecom customer-experience analyst. Return only valid JSON that exactly matches the requested schema. Do not include markdown.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Analyze this telecom customer conversation.\\n\\nEvaluation priorities:\\n- Logical sentiment accuracy.\\n- Clear reasoning for every sentiment choice.\\n- Telecom-specific KPIs that can be derived from a phone call.\\n- Creativity through emotion detection, summary, and recommended actions.\\n\\nStrict JSON schema:\\n{\\n  \\\"overallSentiment\\\": \\\"Positive | Negative | Neutral\\\",\\n  \\\"overallScore\\\": number from -1 to 1,\\n  \\\"summary\\\": \\\"brief conversation summary\\\",\\n  \\\"primaryEmotion\\\": \\\"dominant customer emotion\\\",\\n  \\\"emotionMix\\\": [\\n    { \\\"emotion\\\": \\\"Frustration | Relief | Confusion | Trust | Satisfaction | etc\\\", \\\"intensity\\\": number from 0 to 100 }\\n  ],\\n  \\\"kpis\\\": [\\n    {\\n      \\\"name\\\": \\\"Churn Risk | First Contact Resolution | Customer Effort Score | Escalation Need | Compliance Risk\\\",\\n      \\\"value\\\": \\\"short display value\\\",\\n      \\\"status\\\": \\\"good | watch | risk\\\",\\n      \\\"reasoning\\\": \\\"clear KPI reasoning from call evidence\\\"\\n    }\\n  ],\\n  \\\"sentenceLevel\\\": [\\n    {\\n      \\\"id\\\": number,\\n      \\\"speaker\\\": \\\"Customer | Agent | Unknown\\\",\\n      \\\"text\\\": \\\"single transcript line or sentence\\\",\\n      \\\"sentiment\\\": \\\"Positive | Negative | Neutral\\\",\\n      \\\"score\\\": number from -1 to 1,\\n      \\\"emotion\\\": \\\"detected emotion\\\",\\n      \\\"reasoning\\\": \\\"clear reason for the sentiment label\\\"\\n    }\\n  ],\\n  \\\"recommendedActions\\\": [\\\"specific next-best action for the telecom team\\\"]\\n}\\n\\nRules:\\n- Break the transcript into readable line-by-line or sentence-level entries.\\n- Use evidence from the text, not generic assumptions.\\n- Prefer concise reasoning, but make it clear enough for an evaluator to audit.\\n- Return JSON only.\\n\\nTranscript:\\n{{$json.body.transcript || $json.transcript}}\"\n    }\n  ]\n}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "0be543c1-6d28-49a2-80c9-d628028ff740",
+      "name": "OpenAI - Structured Sentiment Analysis",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        560,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.parse($json.choices[0].message.content) }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "3b6c0fe2-e8fa-42cf-98e7-f7f665a10a32",
+      "name": "Respond to Webhook - Analysis JSON",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        860,
+        280
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook - Analyze Sentiment": {
+      "main": [
+        [
+          {
+            "node": "OpenAI - Structured Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI - Structured Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook - Analysis JSON",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "90dff5c3-f14e-4549-8dbb-32e59d37ac8f",
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "id": "telecom-sentiment-analyzer-n8n",
+  "tags": []
+}

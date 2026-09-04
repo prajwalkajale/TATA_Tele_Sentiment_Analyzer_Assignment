@@ -1,0 +1,17 @@
+Agent: Welcome to Tata Tele Business Services enterprise support. My name is Rahul. Am I speaking with Mr. Sharma from TechNova Logistics?
+Customer: Yes, this is Sharma. Rahul, our dedicated leased line has been completely down for the last forty minutes!
+Agent: I am extremely sorry to hear that you are facing this downtime, Mr. Sharma. I know how critical network uptime is for your logistics operations.
+Customer: It is completely unacceptable. Our warehouse inventory sync is failing, and if this isn't fixed immediately, we will have to rethink our vendor contract.
+Agent: I completely understand your frustration, and I apologize for the severe impact this is having on your business. Let me pull up your circuit ID and run a real-time diagnostic right now.
+Customer: Please do it fast. I have three trucks waiting at the loading bay and the systems are offline.
+Agent: Thank you for your patience. My diagnostics indicate a localized fiber disruption at the primary node servicing your industrial park.
+Customer: So what is the solution? How long is this going to take?
+Agent: I have immediately escalated this as a Priority 1 ticket to our Tier-2 Network Operations Center. Furthermore, I am remotely initiating a failover to your secondary radio link so your warehouse systems can come back online within the next five minutes.
+Customer: Okay, if the failover link works, that will at least get our trucks moving. Are you sure it will take only five minutes?
+Agent: Yes, Mr. Sharma. The routing protocol is updating now. I will personally stay on the line with you until you confirm your systems are syncing.
+Customer: Alright, I can see the network indicator flashing green again. The sync is resuming.
+Agent: Excellent. The NOC team will continue working on repairing the primary fiber line, and I will send you an hourly email update until it is fully restored.
+Customer: That is a big relief. Thank you for acting so quickly, Rahul. I appreciate your help today.
+Agent: You are very welcome, Mr. Sharma. Is there anything else I can assist you with before we drop off?
+Customer: No, that will be all. Thanks again. Have a good day.
+Agent: Thank you for choosing Tata Tele Business Services. Have a great day ahead.
